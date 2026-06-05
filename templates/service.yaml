@@ -1,0 +1,28 @@
+  UW PICO 5.09                                                                      File: /templates/service.yaml                                                                       Modified  
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: flask-api-service
+
+spec:
+ type: ClusterIP
+
+ selector:
+  app: flask-api
+
+ ports:
+  - port: 5000
+    targetPort: 5000            
+
+
+
+
+
+
+
+
+
+
+
+

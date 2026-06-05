@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: flask-api
+ namespace: dev
+
+spec:
+ replicas: {{ .Values.replicaCount }}
+ 
+ selector:
+  matchLabels:
+   app: flask-api
+
+ template:
+   metadata:
+    labels:
+     app: flask-api
+  
+   spec:
+    containers:
+     - name: flask-api
+       image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+       
+       resources:
+        {{- toYaml .Values.resources | nindent 10 }}

@@ -3,7 +3,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
 	return jsonify({
-			"message": "Flask running with Docker compose",
+			"message": "Updated Version V2",
 			"service": "api"
 		})
 @app.route("/status")

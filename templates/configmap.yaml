@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+ name: flask-config
+
+data:
+ APP_ENV: "{{ .Values.env.APP_ENV }}"
+ LOG_INFO: "{{ .Values.env.LOG_LEVEL }}"
+

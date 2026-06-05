@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+ repository: flask-api
+ tag: latest
+
+env:
+ APP_ENV: dev
+ LOG_LEVEL: INFO
+
+secret:
+ dbPassword: paswword123
+ apiKey: demo-key
+
+ingress:
+ enabled: true
+ host: flask.local
+
+resources:
+ requests:
+   cpu: 250m
+   momory: 256Mi
+
+ limits:
+   cpu: 1000m
+   memory: 1Gi
