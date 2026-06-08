@@ -27,7 +27,7 @@ jobs:
       run: |
         git clone https://github.com/Sinthikas/gitops-demo.git
 
-        cd gitops-demo/flask-api
+        cd gitops-demo
 
         sed -i 's/tag:.*/tag: '${GITHUB_SHA}'/' values-dev.yaml
 
