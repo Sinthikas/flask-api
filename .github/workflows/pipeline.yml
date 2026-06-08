@@ -21,11 +21,16 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build -t flask-api .
+        docker build -t flask-api:${GITHUB_SHA::7} .
+
+    - name: Tag Image
+      run: |
+        docker tag flask-api:${GITHUB_SHA::7} \
+        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/flask-api:${GITHUB_SHA::7}
+
     - name: Push Image
       run: |
-        docker push \
-        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/flask-api:latest
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/flask-api:${GITHUB_SHA::7}
 
     - name: Update GitOps Repo
       run: |
