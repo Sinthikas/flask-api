@@ -25,7 +25,7 @@ jobs:
 
     - name: Update GitOps Repo
       run: |
-        git clone https://github.com/Sinthikas/gitops-demo.git
+        git clone https://x-access-token:${{ secrets.GITOPS_TOKEN }}@github.com/Sinthikas/gitops-demo.git
 
         cd gitops-demo
 
