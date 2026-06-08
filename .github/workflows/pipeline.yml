@@ -4,20 +4,33 @@ on:
   push:
     branches:
       - main
-env:
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-
     - name: Checkout Code
       uses: actions/checkout@v4
+
+    - name: Check AWS Secrets
+      run: |
+        if [ -z "$AWS_ACCOUNT_ID" ]; then echo "AWS_ACCOUNT_ID missing"; exit 1; fi
+        if [ -z "$AWS_REGION" ]; then echo "AWS_REGION missing"; exit 1; fi
+        echo "AWS secrets found"
+      env:
+        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to ECR
+      uses: aws-actions/amazon-ecr-login@v2
 
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -39,15 +52,13 @@ jobs:
       run: |
         git clone https://x-access-token:${{ secrets.GITOPS_TOKEN }}@github.com/Sinthikas/gitops-demo.git
 
-        cd gitops-demo
+        cd gitops-demo/flask-api
 
-        sed -i 's/tag:.*/tag: '${GITHUB_SHA}'/' values-dev.yaml
+        sed -i 's/tag:.*/tag: '"${GITHUB_SHA::7}"'/' values-dev.yaml
 
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
 
-        git add .
-
-        git commit -m "Update image tag"
-
+        git add values-dev.yaml
+        git commit -m "Update flask-api image tag to ${GITHUB_SHA::7}" || echo "No changes to commit"
         git push
