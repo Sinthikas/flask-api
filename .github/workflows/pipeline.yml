@@ -24,8 +24,7 @@ jobs:
         docker build -t flask-api .
 
     - name: Update GitOps Repo
-
-       run: |
+      run: |
         git clone https://github.com/Sinthikas/gitops-demo.git
 
         cd gitops-demo/flask-api
