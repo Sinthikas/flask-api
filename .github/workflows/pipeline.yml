@@ -52,7 +52,7 @@ jobs:
       run: |
         git clone https://x-access-token:${{ secrets.GITOPS_TOKEN }}@github.com/Sinthikas/gitops-demo.git
 
-        cd gitops-demo/flask-api
+        cd gitops-demo
 
         sed -i 's/tag:.*/tag: '"${GITHUB_SHA::7}"'/' values-dev.yaml
 
